@@ -1,0 +1,20 @@
+{
+    "name": "zqbx/upload-file",
+    "description": "upload file",
+    "require": {
+        "php": ">=7.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "zqbx",
+            "email": "597050481@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+	"autoload": {
+        "psr-4": {
+            "UploadFile\\": "src/"
+        }
+    }
+}
