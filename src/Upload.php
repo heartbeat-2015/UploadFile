@@ -5,8 +5,6 @@
  */
 namespace UploadFile;
 
-use Symfony\Component\Filesystem\Filesystem;
-
 class Upload {
 
     /**
@@ -20,12 +18,11 @@ class Upload {
         'autoSub'       =>  true, //自动子目录保存文件
         'subName'       =>  array('date', 'Y-m-d'), //子目录创建方式，[0]-函数名，[1]-参数，多个参数使用数组
         'rootPath'      =>  './Uploads/', //保存根路径
-        'savePath'      =>  '', //保存路径  的斜杠自己保持一致
+        'savePath'      =>  '', //保存路径
         'saveName'      =>  array('uniqid', ''), //上传文件命名规则，[0]-函数名，[1]-参数，多个参数使用数组
         'saveExt'       =>  '', //文件保存后缀，空则使用原后缀
         'replace'       =>  false, //存在同名是否覆盖
         'hash'          =>  true, //是否生成hash编码
-        'callback'      =>  false, //检测文件是否存在回调，如果存在返回文件信息数组,这个不懂
         'driver'        =>  'Local', // 文件上传驱动
         'driverConfig'  =>  array(), // 上传驱动配置
     );
@@ -41,16 +38,7 @@ class Upload {
      * @var Object
      */
     private $uploader;
-    
-    public function test(){
-        
-//         $filesystem = new Filesystem(); 
-//         $filesystem->mkdir('./uploads');
-        
-        //var_dump($this->uploader);
-        echo "hello upload file!";
-    }
-    
+
     /**
      * 构造方法，用于构造上传实例
      * @param array  $config 配置
@@ -251,9 +239,15 @@ class Upload {
         $driver = $driver ? : $this->driver;
         $config = $config ? : $this->driverConfig;
         $class = strpos($driver,'\\')? $driver : 'UploadFile\\Driver\\'.ucfirst(strtolower($driver));
-        $this->uploader = new $class($config);
-        if(!$this->uploader){
+        
+        if(!class_exists($class)) {
             throw new \Exception("不存在上传驱动：{$driver}");
+        }
+        
+        $this->uploader = new $class($config);
+        
+        if(!$this->uploader){
+            throw new \Exception("实例化驱动错误：{$driver}");
         }
     }
     
