@@ -20,12 +20,12 @@ class Upload {
         'autoSub'       =>  true, //自动子目录保存文件
         'subName'       =>  array('date', 'Y-m-d'), //子目录创建方式，[0]-函数名，[1]-参数，多个参数使用数组
         'rootPath'      =>  './Uploads/', //保存根路径
-        'savePath'      =>  '', //保存路径
+        'savePath'      =>  '', //保存路径  的斜杠自己保持一致
         'saveName'      =>  array('uniqid', ''), //上传文件命名规则，[0]-函数名，[1]-参数，多个参数使用数组
         'saveExt'       =>  '', //文件保存后缀，空则使用原后缀
         'replace'       =>  false, //存在同名是否覆盖
         'hash'          =>  true, //是否生成hash编码
-        'callback'      =>  false, //检测文件是否存在回调，如果存在返回文件信息数组
+        'callback'      =>  false, //检测文件是否存在回调，如果存在返回文件信息数组,这个不懂
         'driver'        =>  'Local', // 文件上传驱动
         'driverConfig'  =>  array(), // 上传驱动配置
     );
@@ -44,11 +44,11 @@ class Upload {
     
     public function test(){
         
-        $filesystem = new Filesystem(); 
-        $filesystem->mkdir('./uploads');
+//         $filesystem = new Filesystem(); 
+//         $filesystem->mkdir('./uploads');
         
         //var_dump($this->uploader);
-        //echo "hello upload file!";
+        echo "hello upload file!";
     }
     
     /**
@@ -173,18 +173,7 @@ class Upload {
                 $file['md5']  = md5_file($file['tmp_name']);
                 $file['sha1'] = sha1_file($file['tmp_name']);
             }
-            
-            /* 调用回调函数检测文件是否存在 */
-            $data = call_user_func($this->callback, $file);
-            if( $this->callback && $data ){
-                if ( file_exists('.'.$data['path'])  ) {
-                    $info[$key] = $data;
-                    continue;
-                }elseif($this->removeTrash){
-                    call_user_func($this->removeTrash,$data);//删除垃圾据
-                }
-            }
-            
+
             /* 生成保存文件名 */
             $savename = $this->getSaveName($file);
             if(false == $savename){

@@ -8,4 +8,8 @@ use UploadFile\Upload;
 
 $upload = new Upload();
 
-$upload->test();
+// $upload->test();
+
+$res = $upload->uploadOne($_FILES['file']);
+var_dump($res);
+var_dump($upload->getError());
